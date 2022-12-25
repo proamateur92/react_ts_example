@@ -1,4 +1,5 @@
 # 타입스크립트
+
 1. 함수의 매개변수 타입, 객체의 속성 등을 보장받고 개발자의 실수를 줄일 수 있다.
 2. 타입스크립트 코드의 이상이 없으면 자바스크립트로 변환할 수 있다.
 3. 브라우저는 오로지 자바스크립트만 읽어들이므로 변환 과정을 거쳐야 한다.
@@ -376,4 +377,113 @@ return (
   </form>
 </div>
 );
+```
+
+<br>
+
+## theme 설정하기
+
+1. html 요소들이 사용할 props 값들을 명시해줄 스타일링 정의 파일을 만들어준다.
+
+<br>
+
+#### styled.d.ts
+
+```
+// 아래의 코드를 입맛에 맞게 수정해주자
+// import original module declarations
+import 'styled-components';
+
+// and extend them!
+declare module 'styled-components' {
+  export interface DefaultTheme {
+    borderRadius: string;
+
+    colors: {
+      main: string;
+      secondary: string;
+    };
+  }
+}
+```
+
+<br>
+
+- https://styled-components.com/docs/api#typescript
+
+<br>
+
+2. 테마를 스타일링 해주기 위한 파일을 생성한다.
+
+```
+import { DefaultTheme } from "styled-components";
+
+export const lightTheme: DefaultTheme = {
+  bgColor: "whitesmoke",
+  textColor: "#1a1a1a",
+  btnBgColor: "whitesmoke",
+  btnTextColor: "#1a1a1a",
+};
+
+export const darkTheme: DefaultTheme = {
+  bgColor: "#1a1a1a",
+  textColor: "whitesmoke",
+  btnBgColor: "#1a1a1a",
+  btnTextColor: "whitesmoke",
+};
+```
+
+<br>
+
+#### index.tsx
+> ThemeProvider로 감싸준다.
+```
+...
+
+<ThemeProvider theme={darkTheme}>
+	<App />
+</ThemeProvider>
+...
+```
+
+#### App.tsx
+> ThemeProvider로부터 전달받은 theme props로 스타일링 해준다.
+```
+
+const Container = styled.div`
+  background-color: ${(props) => props.theme.bgColor};
+    h1 {
+      color: ${(props) => props.theme.textColor};
+    }
+    button {
+      background-color: ${(props) => props.theme.btnBgColor};
+      color: ${(props) => props.theme.textColor};
+      border: 1px solid ${(props) => props.theme.textColor};
+   }
+`;
+
+return (
+  <Container>
+    <h1>HELL'O</h1>
+    <button>click me!</button>
+  </Container>
+);
+```  
+
+<br>
+
+#### 리액트 관련 모든 이벤트 타입
+```
+https://reactjs.org/docs/events.html
+```
+
+<br>
+
+- 라이브러리 내려받을 때 아래와 같이 먼저 타입 정의 파일을 내려받도록 시도해보자 <br>
+- (웬만한 라이브러리는 모두 있으므로)
+```
+//npm i --save-dev @types/라이브러리이름
+
+// styled-components 정의 파일
+npm i --save-dev @types/styled-components
 ```
